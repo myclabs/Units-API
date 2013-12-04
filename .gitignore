@@ -1,0 +1,9 @@
+/vendor/
+composer.phar
+composer.lock
+*.vpp~*
+*.vpp.*
+
+.DS_Store
+.idea/*
+.vagrant/*

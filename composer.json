@@ -1,0 +1,12 @@
+{
+    "name": "myclabs/unit-api",
+    "type": "library",
+    "autoload": {
+        "psr-0": {
+            "MyCLabs\\UnitAPI": "src/"
+        }
+    },
+    "require": {
+        "php": ">=5.5.0"
+    }
+}
