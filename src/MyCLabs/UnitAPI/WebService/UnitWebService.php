@@ -67,6 +67,7 @@ class UnitWebService implements UnitService
         $unit->id = $raw->id;
         $unit->label = $raw->label;
         $unit->symbol = $raw->symbol;
+        $unit->type = $raw->type;
         if (isset($raw->unitSystem)) {
             $unit->unitSystem = $raw->unitSystem;
         }
