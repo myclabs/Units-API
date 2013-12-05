@@ -3,7 +3,8 @@
     "type": "library",
     "autoload": {
         "psr-0": {
-            "MyCLabs\\UnitAPI": "src/"
+            "MyCLabs\\UnitAPI": "src/",
+            "UnitAPITest": "tests/"
         }
     },
     "require": {

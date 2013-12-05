@@ -8,3 +8,6 @@
 *.vpp    binary
 *.ttf    binary
 *.jpg    binary
+
+tests/           export-ignore
+phpunit.xml.dist export-ignore
