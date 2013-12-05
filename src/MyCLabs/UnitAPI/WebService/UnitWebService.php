@@ -26,9 +26,7 @@ class UnitWebService implements UnitService
     }
 
     /**
-     * Returns all known units.
-     *
-     * @return UnitDTO[]
+     * {@inheritdoc}
      */
     public function getUnits()
     {
@@ -55,11 +53,7 @@ class UnitWebService implements UnitService
     }
 
     /**
-     * Returns a unit.
-     *
-     * @param string $id Expression identifying the unit.
-     *
-     * @return UnitDTO
+     * {@inheritdoc}
      */
     public function getUnit($id)
     {
