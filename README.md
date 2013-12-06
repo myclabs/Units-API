@@ -20,7 +20,7 @@ echo $value2; // 200 km ± 10 %
 
 Values can be easily serialized to string:
 
-``php
+```php
 $value1 = new Value(100, 'm', 5);
 
 $str = $value->serialize();
