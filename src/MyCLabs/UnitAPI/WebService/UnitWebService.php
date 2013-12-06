@@ -61,7 +61,7 @@ class UnitWebService implements UnitService
      */
     public function getUnit($id)
     {
-        $request = $this->httpClient->get('unit/');
+        $request = $this->httpClient->get('unit/' . urlencode($id) . '/');
         $response = $request->send();
 
         $raw = json_decode($response->getBody());
