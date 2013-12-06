@@ -16,7 +16,7 @@ class OperationWebService extends BaseWebService implements OperationService
      */
     public function getConversionFactor($unit1, $unit2)
     {
-        $response = $this->get('conversion-factor/' . urlencode($unit1) . '/' . urlencode($unit2));
+        $response = $this->get('conversion-factor?unit1=' . urlencode($unit1) . '&unit2=' . urlencode($unit2));
 
         return (float) $response;
     }
