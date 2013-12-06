@@ -47,7 +47,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnit($id)
     {
-        $response = $this->get('unit/' . urlencode($id) . '/');
+        $response = $this->get('unit/' . urlencode($id));
 
         $unit = new UnitDTO();
         $unit->id = $response->id;
