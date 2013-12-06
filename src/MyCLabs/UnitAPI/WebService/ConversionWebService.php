@@ -2,7 +2,6 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
-use Guzzle\Http\Client;
 use MyCLabs\UnitAPI\ConversionService;
 use MyCLabs\UnitAPI\Value;
 
@@ -11,20 +10,8 @@ use MyCLabs\UnitAPI\Value;
  *
  * @author matthieu.napoli
  */
-class ConversionWebService implements ConversionService
+class ConversionWebService extends BaseWebService implements ConversionService
 {
-    const ENDPOINT = 'convert/';
-
-    /**
-     * @var Client
-     */
-    private $httpClient;
-
-    public function __construct(Client $httpClient)
-    {
-        $this->httpClient = $httpClient;
-    }
-
     /**
      * {@inheritdoc}
      */
@@ -35,11 +22,8 @@ class ConversionWebService implements ConversionService
             'value'      => $value->serialize(),
         ];
 
-        $request = $this->httpClient->post(self::ENDPOINT, null, $data);
-        $response = $request->send();
+        $response = $this->post('convert/', $data);
 
-        $raw = json_decode($response->getBody());
-
-        return Value::unserialize($raw->value);
+        return Value::unserialize($response->value);
     }
 }
