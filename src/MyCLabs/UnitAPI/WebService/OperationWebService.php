@@ -20,4 +20,14 @@ class OperationWebService extends BaseWebService implements OperationService
 
         return (float) $response;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function areCompatible($unit1, $unit2)
+    {
+        $response = $this->get('compatible?unit1=' . urlencode($unit1) . '&unit2=' . urlencode($unit2));
+
+        return (boolean) $response;
+    }
 }

@@ -6,7 +6,9 @@ use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
 use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 
 /**
- * Service that converts values from a unit to another.
+ * Service that performs operations on units.
+ *
+ * @author matthieu.napoli
  */
 interface OperationService
 {
@@ -25,4 +27,18 @@ interface OperationService
      * @return float Conversion factor.
      */
     public function getConversionFactor($unit1, $unit2);
+
+    /**
+     * Returns true if the given units are compatible, false otherwise.
+     *
+     * Units are compatible if they have the same physical quantity.
+     * Another way to put it is if they have the same unit of reference.
+     *
+     * @param string $unit1 Expression of a unit.
+     * @param string $unit2 Expression of a unit.
+     *
+     * @throws UnknownUnitException One of the unit is unknown.
+     * @return boolean
+     */
+    public function areCompatible($unit1, $unit2);
 }
