@@ -3,6 +3,8 @@
 namespace MyCLabs\UnitAPI;
 
 use MyCLabs\UnitAPI\DTO\UnitDTO;
+use MyCLabs\UnitAPI\DTO\UnitSystemDTO;
+use MyCLabs\UnitAPI\DTO\PhysicalQuantityDTO;
 
 /**
  * Service that provides units.
@@ -24,4 +26,18 @@ interface UnitService
      * @return UnitDTO
      */
     public function getUnit($id);
+
+    /**
+     * Returns all systems of units.
+     *
+     * @return UnitSystemDTO[]
+     */
+    public function getUnitSystems();
+
+    /**
+     * Returns all physical quantities.
+     *
+     * @return PhysicalQuantityDTO[]
+     */
+    public function getPhysicalQuantities();
 }

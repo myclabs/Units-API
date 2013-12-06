@@ -38,8 +38,14 @@ class UnitDTO
     public $type;
 
     /**
-     * ID of the unit system.
-     * @var string
+     * ID of the unit system if any.
+     * @var string|null
      */
     public $unitSystem;
+
+    /**
+     * ID of the physical quantity if any.
+     * @var string|null
+     */
+    public $physicalQuantity;
 }

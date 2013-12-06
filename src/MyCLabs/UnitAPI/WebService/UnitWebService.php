@@ -3,7 +3,9 @@
 namespace MyCLabs\UnitAPI\WebService;
 
 use Guzzle\Http\Client;
+use MyCLabs\UnitAPI\DTO\PhysicalQuantityDTO;
 use MyCLabs\UnitAPI\DTO\UnitDTO;
+use MyCLabs\UnitAPI\DTO\UnitSystemDTO;
 use MyCLabs\UnitAPI\UnitService;
 
 /**
@@ -13,8 +15,6 @@ use MyCLabs\UnitAPI\UnitService;
  */
 class UnitWebService implements UnitService
 {
-    const ENDPOINT = 'unit/';
-
     /**
      * @var Client
      */
@@ -30,7 +30,7 @@ class UnitWebService implements UnitService
      */
     public function getUnits()
     {
-        $request = $this->httpClient->get(self::ENDPOINT);
+        $request = $this->httpClient->get('unit/');
         $response = $request->send();
 
         $raw = json_decode($response->getBody());
@@ -46,6 +46,9 @@ class UnitWebService implements UnitService
             if (isset($item->unitSystem)) {
                 $unit->unitSystem = $item->unitSystem;
             }
+            if (isset($item->physicalQuantity)) {
+                $unit->physicalQuantity = $item->physicalQuantity;
+            }
 
             $units[] = $unit;
         }
@@ -58,7 +61,7 @@ class UnitWebService implements UnitService
      */
     public function getUnit($id)
     {
-        $request = $this->httpClient->get(self::ENDPOINT);
+        $request = $this->httpClient->get('unit/');
         $response = $request->send();
 
         $raw = json_decode($response->getBody());
@@ -71,7 +74,58 @@ class UnitWebService implements UnitService
         if (isset($raw->unitSystem)) {
             $unit->unitSystem = $raw->unitSystem;
         }
+        if (isset($raw->physicalQuantity)) {
+            $unit->physicalQuantity = $raw->physicalQuantity;
+        }
 
         return $unit;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUnitSystems()
+    {
+        $request = $this->httpClient->get('unit-system/');
+        $response = $request->send();
+
+        $raw = json_decode($response->getBody());
+
+        $unitSystems = [];
+
+        foreach ($raw as $item) {
+            $unitSystem = new UnitSystemDTO();
+            $unitSystem->id = $item->id;
+            $unitSystem->label = $item->label;
+
+            $unitSystems[] = $unitSystem;
+        }
+
+        return $unitSystems;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getPhysicalQuantities()
+    {
+        $request = $this->httpClient->get('physical-quantity/');
+        $response = $request->send();
+
+        $raw = json_decode($response->getBody());
+
+        $quantities = [];
+
+        foreach ($raw as $item) {
+            $quantity = new PhysicalQuantityDTO();
+            $quantity->id = $item->id;
+            $quantity->label = $item->label;
+            $quantity->symbol = $item->symbol;
+            $quantity->unitOfReference = $item->unitOfReference;
+
+            $quantities[] = $quantity;
+        }
+
+        return $quantities;
     }
 }
