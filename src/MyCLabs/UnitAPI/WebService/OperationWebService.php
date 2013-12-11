@@ -26,8 +26,22 @@ class OperationWebService extends BaseWebService implements OperationService
      */
     public function areCompatible($unit1, $unit2)
     {
-        $response = $this->get('compatible?unit1=' . urlencode($unit1) . '&unit2=' . urlencode($unit2));
+        $query = http_build_query(['units' => func_get_args()]);
+
+        $response = $this->get('compatible?' . $query);
 
         return (boolean) $response;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function multiply($unit1, $unit2)
+    {
+        $query = http_build_query(['units' => func_get_args()]);
+
+        $response = $this->get('multiply?' . $query);
+
+        return (string) $response;
     }
 }
