@@ -16,12 +16,16 @@ class UnknownUnitException extends Exception
      */
     private $unitId;
 
+    public function __construct($message, $unitId, $previousException = null)
+    {
+        parent::__construct($message, 0, $previousException);
+
+        $this->unitId = $unitId;
+    }
+
     public static function create($id)
     {
-        $e = new self("Unknown unit $id");
-        $e->unitId = $id;
-
-        return $e;
+        return new self("Unknown unit $id", $id);
     }
 
     /**
