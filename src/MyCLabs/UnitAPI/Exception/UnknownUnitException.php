@@ -11,8 +11,24 @@ use Exception;
  */
 class UnknownUnitException extends Exception
 {
+    /**
+     * @var string
+     */
+    private $unitId;
+
     public static function create($id)
     {
-        return new self("Unknown unit $id");
+        $e = new self("Unknown unit $id");
+        $e->unitId = $id;
+
+        return $e;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUnitId()
+    {
+        return $this->unitId;
     }
 }
