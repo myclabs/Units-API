@@ -10,7 +10,7 @@ use MyCLabs\UnitAPI\Exception\UnknownUnitException;
  *
  * @author matthieu.napoli
  */
-interface OperationService
+interface UnitOperationService
 {
     /**
      * Returns the conversion factor between two compatible units.

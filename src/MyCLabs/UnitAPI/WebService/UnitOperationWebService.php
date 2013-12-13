@@ -2,14 +2,14 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
-use MyCLabs\UnitAPI\OperationService;
+use MyCLabs\UnitAPI\UnitOperationService;
 
 /**
- * Implementation of the OperationService using the webservice.
+ * Implementation of the UnitOperationService using the webservice.
  *
  * @author matthieu.napoli
  */
-class OperationWebService extends BaseWebService implements OperationService
+class UnitOperationWebService extends BaseWebService implements UnitOperationService
 {
     /**
      * {@inheritdoc}
