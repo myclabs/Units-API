@@ -58,4 +58,18 @@ interface UnitOperationService
      * @return string Resulting unit.
      */
     public function multiply($unit1, $unit2);
+
+    /**
+     * Inverses a unit.
+     *
+     * For example:
+     *     m -> m^-1
+     *     km . h^-1 = km^-1 . h
+     *
+     * @param string $unit Expression of a unit.
+     *
+     * @throws UnknownUnitException The unit is unknown.
+     * @return string Inverse of the given unit.
+     */
+    public function inverse($unit);
 }

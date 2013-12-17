@@ -44,4 +44,14 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
 
         return (string) $response;
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function inverse($unit)
+    {
+        $response = $this->get('inverse/' . urlencode($unit));
+
+        return (string) $response;
+    }
 }

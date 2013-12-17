@@ -28,6 +28,15 @@ interface UnitService
     public function getUnit($id);
 
     /**
+     * Returns all units compatible with the given unit.
+     *
+     * @param string $id Expression identifying a unit.
+     *
+     * @return UnitDTO[] Compatible units.
+     */
+    public function getCompatibleUnits($id);
+
+    /**
      * Returns all systems of units.
      *
      * @return UnitSystemDTO[]

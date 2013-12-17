@@ -67,6 +67,34 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
+    public function getCompatibleUnits($id)
+    {
+        $response = $this->get('compatible-units/' . urlencode($id));
+
+        $units = [];
+
+        foreach ($response as $item) {
+            $unit = new UnitDTO();
+            $unit->id = $item->id;
+            $unit->label = $item->label;
+            $unit->symbol = $item->symbol;
+            $unit->type = $item->type;
+            if (isset($item->unitSystem)) {
+                $unit->unitSystem = $item->unitSystem;
+            }
+            if (isset($item->physicalQuantity)) {
+                $unit->physicalQuantity = $item->physicalQuantity;
+            }
+
+            $units[] = $unit;
+        }
+
+        return $units;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUnitSystems()
     {
         $response = $this->get('unit-system/');
