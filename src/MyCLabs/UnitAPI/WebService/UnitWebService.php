@@ -2,9 +2,11 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
+use Guzzle\Http\Exception\BadResponseException;
 use MyCLabs\UnitAPI\DTO\PhysicalQuantityDTO;
 use MyCLabs\UnitAPI\DTO\UnitDTO;
 use MyCLabs\UnitAPI\DTO\UnitSystemDTO;
+use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 use MyCLabs\UnitAPI\UnitService;
 
 /**
@@ -47,7 +49,16 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnit($id)
     {
-        $response = $this->get('unit/' . urlencode($id));
+        try {
+            $response = $this->get('unit/' . urlencode($id), false);
+        } catch (BadResponseException $e) {
+            if (($e->getResponse()->getStatusCode() === 404)
+                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
+            ) {
+                throw UnknownUnitException::create($id);
+            }
+            throw WebServiceException::create($e);
+        }
 
         $unit = new UnitDTO();
         $unit->id = $response->id;
@@ -69,7 +80,16 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getCompatibleUnits($id)
     {
-        $response = $this->get('compatible-units/' . urlencode($id));
+        try {
+            $response = $this->get('compatible-units/' . urlencode($id), false);
+        } catch (BadResponseException $e) {
+            if (($e->getResponse()->getStatusCode() === 404)
+                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
+            ) {
+                throw UnknownUnitException::create($id);
+            }
+            throw WebServiceException::create($e);
+        }
 
         $units = [];
 

@@ -3,6 +3,7 @@
 namespace MyCLabs\UnitAPI\WebService;
 
 use Guzzle\Http\ClientInterface;
+use Guzzle\Http\Exception\BadResponseException;
 use Guzzle\Http\Exception\RequestException;
 
 /**
@@ -29,18 +30,25 @@ class BaseWebService
      * Performs a HTTP GET request.
      *
      * @param string $url
+     * @param bool   $catchExceptions Should the method catch the exceptions?
      *
-     * @throws WebServiceException Error while calling the webservice
+     * @throws BadResponseException
+     * @throws WebServiceException
      * @return mixed Response of the webservice as a PHP array or object (stdClass)
      */
-    protected function get($url)
+    protected function get($url, $catchExceptions = true)
     {
         $request = $this->httpClient->get($url);
 
         try {
             $response = $request->send();
+        } catch (BadResponseException $e) {
+            if (!$catchExceptions) {
+                throw $e;
+            }
+            throw WebServiceException::create($e);
         } catch (RequestException $e) {
-            throw new WebServiceException('Error while calling the Units webservice: ' . $e->getMessage(), 0, $e);
+            throw WebServiceException::create($e);
         }
 
         return json_decode($response->getBody());
