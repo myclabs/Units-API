@@ -115,6 +115,37 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
+    public function getUnitOfReference($id)
+    {
+        try {
+            $response = $this->get('unit-of-reference/' . urlencode($id), false);
+        } catch (BadResponseException $e) {
+            if (($e->getResponse()->getStatusCode() === 404)
+                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
+            ) {
+                throw UnknownUnitException::create($id);
+            }
+            throw WebServiceException::create($e);
+        }
+
+        $unit = new UnitDTO();
+        $unit->id = $response->id;
+        $unit->label = $response->label;
+        $unit->symbol = $response->symbol;
+        $unit->type = $response->type;
+        if (isset($response->unitSystem)) {
+            $unit->unitSystem = $response->unitSystem;
+        }
+        if (isset($response->physicalQuantity)) {
+            $unit->physicalQuantity = $response->physicalQuantity;
+        }
+
+        return $unit;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getUnitSystems()
     {
         $response = $this->get('unit-system/');

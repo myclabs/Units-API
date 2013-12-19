@@ -65,6 +65,29 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
         $service->getCompatibleUnits('m');
     }
 
+    public function testGetUnitOfReference()
+    {
+        $service = $this->createService(
+            '{"id":"m","label":"m\u00e8tre","symbol":"m","type":"standard",'
+            . '"unitSystem":"international","physicalQuantity":"l"}'
+        );
+
+        $unit = $service->getUnitOfReference('km');
+
+        $this->assertTrue($unit instanceof UnitDTO);
+        $this->assertEquals('m', $unit->id);
+        $this->assertEquals('mètre', $unit->label);
+    }
+
+    /**
+     * @expectedException \MyCLabs\UnitAPI\Exception\UnknownUnitException
+     */
+    public function testGetUnitOfReferenceNotFound()
+    {
+        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service->getUnitOfReference('m');
+    }
+
     private function createService($responseBody, $responseCode = 200)
     {
         $plugin = new MockPlugin();
