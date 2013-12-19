@@ -8,6 +8,9 @@ use Guzzle\Plugin\Mock\MockPlugin;
 use MyCLabs\UnitAPI\DTO\UnitDTO;
 use MyCLabs\UnitAPI\WebService\UnitWebService;
 
+/**
+ * @covers \MyCLabs\UnitAPI\WebService\UnitWebService
+ */
 class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
 {
     public function testGetUnitsEmpty()
@@ -22,7 +25,10 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUnit()
     {
-        $service = $this->createService('{"id":"m","label":"m\u00e8tre","symbol":"m","type":"standard","unitSystem":"international","physicalQuantity":"l"}');
+        $service = $this->createService(
+            '{"id":"m","label":"m\u00e8tre","symbol":"m","type":"standard",'
+            . '"unitSystem":"international","physicalQuantity":"l"}'
+        );
 
         $unit = $service->getUnit('m');
 

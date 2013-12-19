@@ -2,6 +2,9 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
+use Guzzle\Http\Exception\BadResponseException;
+use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
+use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 use MyCLabs\UnitAPI\UnitOperationService;
 
 /**
@@ -16,7 +19,29 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
      */
     public function getConversionFactor($unit1, $unit2)
     {
-        $response = $this->get('conversion-factor?unit1=' . urlencode($unit1) . '&unit2=' . urlencode($unit2));
+        $url = 'conversion-factor?unit1=' . urlencode($unit1) . '&unit2=' . urlencode($unit2);
+        try {
+            $response = $this->get($url, false);
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
+            $matches = [];
+
+            // Unknown unit
+            if (($response->getStatusCode() === 404)
+                && preg_match('/^UnknownUnitException: Unknown unit (.+)$/', $response->getBody(), $matches)
+            ) {
+                throw UnknownUnitException::create($matches[1]);
+            }
+
+            // Incompatible units
+            if (($response->getStatusCode() === 400)
+                && preg_match('/^IncompatibleUnitsException: (.+)$/', $response->getBody(), $matches)
+            ) {
+                throw new IncompatibleUnitsException($matches[1]);
+            }
+
+            throw WebServiceException::create($e);
+        }
 
         return (float) $response;
     }
@@ -28,7 +53,21 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
     {
         $query = http_build_query(['units' => func_get_args()]);
 
-        $response = $this->get('compatible?' . $query);
+        try {
+            $response = $this->get('compatible?' . $query, false);
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
+            $matches = [];
+
+            // Unknown unit
+            if (($response->getStatusCode() === 404)
+                && preg_match('/^UnknownUnitException: Unknown unit (.+)$/', $response->getBody(), $matches)
+            ) {
+                throw UnknownUnitException::create($matches[1]);
+            }
+
+            throw WebServiceException::create($e);
+        }
 
         return (boolean) $response;
     }
@@ -40,7 +79,21 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
     {
         $query = http_build_query(['units' => func_get_args()]);
 
-        $response = $this->get('multiply?' . $query);
+        try {
+            $response = $this->get('multiply?' . $query, false);
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
+            $matches = [];
+
+            // Unknown unit
+            if (($response->getStatusCode() === 404)
+                && preg_match('/^UnknownUnitException: Unknown unit (.+)$/', $response->getBody(), $matches)
+            ) {
+                throw UnknownUnitException::create($matches[1]);
+            }
+
+            throw WebServiceException::create($e);
+        }
 
         return (string) $response;
     }
@@ -50,7 +103,16 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
      */
     public function inverse($unit)
     {
-        $response = $this->get('inverse/' . urlencode($unit));
+        try {
+            $response = $this->get('inverse/' . urlencode($unit), false);
+        } catch (BadResponseException $e) {
+            if (($e->getResponse()->getStatusCode() === 404)
+                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
+            ) {
+                throw UnknownUnitException::create($unit);
+            }
+            throw WebServiceException::create($e);
+        }
 
         return (string) $response;
     }
