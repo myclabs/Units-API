@@ -17,7 +17,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
     {
         $service = $this->createService('[]');
 
-        $units = $service->getUnits();
+        $units = $service->getUnits('en');
 
         $this->assertInternalType('array', $units);
         $this->assertEmpty($units);
@@ -30,7 +30,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
             . '"unitSystem":"international","physicalQuantity":"l"}'
         );
 
-        $unit = $service->getUnit('m');
+        $unit = $service->getUnit('m', 'fr');
 
         $this->assertTrue($unit instanceof UnitDTO);
         $this->assertEquals('m', $unit->id);
@@ -43,14 +43,14 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetUnitNotFound()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
-        $service->getUnit('m');
+        $service->getUnit('m', 'en');
     }
 
     public function testGetCompatibleUnitsEmpty()
     {
         $service = $this->createService('[]');
 
-        $units = $service->getCompatibleUnits('m');
+        $units = $service->getCompatibleUnits('m', 'en');
 
         $this->assertInternalType('array', $units);
         $this->assertEmpty($units);
@@ -62,7 +62,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetCompatibleUnitsNotFound()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
-        $service->getCompatibleUnits('m');
+        $service->getCompatibleUnits('m', 'en');
     }
 
     public function testGetUnitOfReference()
@@ -72,7 +72,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
             . '"unitSystem":"international","physicalQuantity":"l"}'
         );
 
-        $unit = $service->getUnitOfReference('km');
+        $unit = $service->getUnitOfReference('km', 'fr');
 
         $this->assertTrue($unit instanceof UnitDTO);
         $this->assertEquals('m', $unit->id);
@@ -85,7 +85,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
     public function testGetUnitOfReferenceNotFound()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
-        $service->getUnitOfReference('m');
+        $service->getUnitOfReference('m', 'en');
     }
 
     private function createService($responseBody, $responseCode = 200)

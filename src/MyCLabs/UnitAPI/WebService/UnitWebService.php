@@ -19,9 +19,9 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnits()
+    public function getUnits($locale)
     {
-        $response = $this->get('unit/');
+        $response = $this->get($locale . '/unit/');
 
         $units = [];
 
@@ -47,10 +47,10 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnit($id)
+    public function getUnit($id, $locale)
     {
         try {
-            $response = $this->get('unit/' . urlencode($id), false);
+            $response = $this->get($locale . '/unit/' . urlencode($id), false);
         } catch (BadResponseException $e) {
             if (($e->getResponse()->getStatusCode() === 404)
                 && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
@@ -78,10 +78,10 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getCompatibleUnits($id)
+    public function getCompatibleUnits($id, $locale)
     {
         try {
-            $response = $this->get('compatible-units/' . urlencode($id), false);
+            $response = $this->get($locale . '/compatible-units/' . urlencode($id), false);
         } catch (BadResponseException $e) {
             if (($e->getResponse()->getStatusCode() === 404)
                 && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
@@ -115,10 +115,10 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnitOfReference($id)
+    public function getUnitOfReference($id, $locale)
     {
         try {
-            $response = $this->get('unit-of-reference/' . urlencode($id), false);
+            $response = $this->get($locale . '/unit-of-reference/' . urlencode($id), false);
         } catch (BadResponseException $e) {
             if (($e->getResponse()->getStatusCode() === 404)
                 && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
@@ -146,9 +146,9 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnitSystems()
+    public function getUnitSystems($locale)
     {
-        $response = $this->get('unit-system/');
+        $response = $this->get($locale . '/unit-system/');
 
         $unitSystems = [];
 
@@ -166,9 +166,9 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getPhysicalQuantities()
+    public function getPhysicalQuantities($locale)
     {
-        $response = $this->get('physical-quantity/');
+        $response = $this->get($locale . '/physical-quantity/');
 
         $quantities = [];
 
