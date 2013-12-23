@@ -1,5 +1,7 @@
 # Client API for the Units application
 
+[![Build Status](https://travis-ci.org/myclabs/Units-API.png?branch=master)](https://travis-ci.org/myclabs/Units-API)
+
 ## Unit service
 
 Methods:
