@@ -5,6 +5,7 @@ namespace MyCLabs\UnitAPI\WebService;
 use Guzzle\Http\Exception\BadResponseException;
 use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
 use MyCLabs\UnitAPI\Exception\UnknownUnitException;
+use MyCLabs\UnitAPI\Operation\Operation;
 use MyCLabs\UnitAPI\UnitOperationService;
 
 /**
@@ -14,6 +15,14 @@ use MyCLabs\UnitAPI\UnitOperationService;
  */
 class UnitOperationWebService extends BaseWebService implements UnitOperationService
 {
+    /**
+     * {@inheritdoc}
+     */
+    public function execute(Operation $operation)
+    {
+        // TODO
+    }
+
     /**
      * {@inheritdoc}
      */

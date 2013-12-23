@@ -4,6 +4,7 @@ namespace MyCLabs\UnitAPI;
 
 use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
 use MyCLabs\UnitAPI\Exception\UnknownUnitException;
+use MyCLabs\UnitAPI\Operation\Operation;
 
 /**
  * Service that performs operations on units.
@@ -12,6 +13,20 @@ use MyCLabs\UnitAPI\Exception\UnknownUnitException;
  */
 interface UnitOperationService
 {
+    /**
+     * Executes a operation operation of units.
+     *
+     * For example:
+     *     km * h^-1 = km.h^-1
+     *     m^2 * m^-1 = m
+     *
+     * @param Operation $operation
+     *
+     * @throws UnknownUnitException One of the unit is unknown.
+     * @return string Resulting unit.
+     */
+    public function execute(Operation $operation);
+
     /**
      * Returns the conversion factor between two compatible units.
      *
