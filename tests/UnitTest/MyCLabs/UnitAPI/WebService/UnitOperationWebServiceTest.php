@@ -81,23 +81,42 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
         $service->areCompatible('m', 'km');
     }
 
-    public function testMultiply()
+    public function testAddition()
     {
-        $service = $this->createService('"m.g"');
+        $service = $this->createService('{"unit": "kg"}');
+
+        $operation = OperationBuilder::addition()
+            ->with('g')
+            ->with('kg')
+            ->getOperation();
+
+        $operationResult = $service->execute($operation);
+
+        $this->assertInstanceOf('MyCLabs\UnitAPI\Operation\Result\AdditionResult', $operationResult);
+        $this->assertEquals('kg', $operationResult->getUnitId());
+    }
+
+    public function testMultiplication()
+    {
+        $service = $this->createService('{"unit": "m.kg", "conversionFactor": 1.}');
 
         $operation = OperationBuilder::multiplication()
             ->with('m')
-            ->with('g')
+            ->with('kg')
             ->getOperation();
 
-        $this->assertEquals('m.g', $service->execute($operation));
+        $operationResult = $service->execute($operation);
+
+        $this->assertInstanceOf('MyCLabs\UnitAPI\Operation\Result\MultiplicationResult', $operationResult);
+        $this->assertEquals('m.kg', $operationResult->getUnitId());
+        $this->assertEquals(1., $operationResult->getConversionFactor());
     }
 
     /**
      * @expectedException \MyCLabs\UnitAPI\Exception\UnknownUnitException
      * @expectedExceptionMessage Unknown unit m
      */
-    public function testMultiplyUnitNotFound1()
+    public function testMultiplicationUnitNotFound1()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
 
@@ -113,7 +132,7 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      * @expectedException \MyCLabs\UnitAPI\Exception\UnknownUnitException
      * @expectedExceptionMessage Unknown unit g
      */
-    public function testMultiplyUnitNotFound2()
+    public function testMultiplicationUnitNotFound2()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit g', 404);
 

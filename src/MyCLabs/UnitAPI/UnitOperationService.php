@@ -5,6 +5,7 @@ namespace MyCLabs\UnitAPI;
 use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
 use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 use MyCLabs\UnitAPI\Operation\Operation;
+use MyCLabs\UnitAPI\Operation\Result\OperationResult;
 
 /**
  * Service that performs operations on units.
@@ -23,7 +24,7 @@ interface UnitOperationService
      * @param Operation $operation
      *
      * @throws UnknownUnitException One of the unit is unknown.
-     * @return string Resulting unit.
+     * @return OperationResult Result of the operation.
      */
     public function execute(Operation $operation);
 

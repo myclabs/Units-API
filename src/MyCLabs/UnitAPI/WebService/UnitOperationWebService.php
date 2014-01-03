@@ -9,6 +9,8 @@ use MyCLabs\UnitAPI\Operation\Addition;
 use MyCLabs\UnitAPI\Operation\Multiplication;
 use MyCLabs\UnitAPI\Operation\Operation;
 use MyCLabs\UnitAPI\Operation\OperationComponent;
+use MyCLabs\UnitAPI\Operation\Result\AdditionResult;
+use MyCLabs\UnitAPI\Operation\Result\MultiplicationResult;
 use MyCLabs\UnitAPI\UnitOperationService;
 
 /**
@@ -69,7 +71,14 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
             throw WebServiceException::create($e);
         }
 
-        return (string) $response;
+        switch ($operation) {
+            case $operation instanceof Addition:
+                return new AdditionResult($response->unit);
+            case $operation instanceof Multiplication:
+                return new MultiplicationResult($response->unit, $response->conversionFactor);
+            default:
+                throw new \Exception;
+        }
     }
 
     /**
