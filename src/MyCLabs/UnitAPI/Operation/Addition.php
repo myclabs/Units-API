@@ -9,4 +9,11 @@ namespace MyCLabs\UnitAPI\Operation;
  */
 class Addition extends Operation
 {
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return implode(' + ', $this->getComponents());
+    }
 }

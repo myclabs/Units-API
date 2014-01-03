@@ -31,4 +31,9 @@ abstract class Operation
     {
         return $this->components;
     }
+
+    /**
+     * @return string
+     */
+    abstract public function __toString();
 }
