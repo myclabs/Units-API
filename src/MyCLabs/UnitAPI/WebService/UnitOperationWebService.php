@@ -5,7 +5,10 @@ namespace MyCLabs\UnitAPI\WebService;
 use Guzzle\Http\Exception\BadResponseException;
 use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
 use MyCLabs\UnitAPI\Exception\UnknownUnitException;
+use MyCLabs\UnitAPI\Operation\Addition;
+use MyCLabs\UnitAPI\Operation\Multiplication;
 use MyCLabs\UnitAPI\Operation\Operation;
+use MyCLabs\UnitAPI\Operation\OperationComponent;
 use MyCLabs\UnitAPI\UnitOperationService;
 
 /**
@@ -20,7 +23,53 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
      */
     public function execute(Operation $operation)
     {
-        // TODO
+        switch ($operation) {
+            case $operation instanceof Addition:
+                $operationType = 'addition';
+                break;
+            case $operation instanceof Multiplication:
+                $operationType = 'multiplication';
+                break;
+            default:
+                throw new \Exception;
+        }
+
+        $components = array_map(function (OperationComponent $component) {
+            return [
+                'unit' => $component->getUnitId(),
+                'exponent' => $component->getExponent(),
+            ];
+        }, $operation->getComponents());
+
+        $query = http_build_query([
+            'operation'  => $operationType,
+            'components' => $components,
+        ]);
+
+        try {
+            $response = $this->get('/api/en/execute?' . $query, false);
+        } catch (BadResponseException $e) {
+            $response = $e->getResponse();
+            $matches = [];
+
+            // Unknown unit
+            if (($response->getStatusCode() === 404)
+                && preg_match('/^UnknownUnitException: Unknown unit (.+)$/', $response->getBody(), $matches)
+            ) {
+                throw UnknownUnitException::create($matches[1]);
+            }
+
+            // Incompatible units
+            if (($response->getStatusCode() === 400)
+                && preg_match('/^IncompatibleUnitsException: (.+)$/', $response->getBody(), $matches)
+            ) {
+                throw new IncompatibleUnitsException($matches[1]);
+            }
+
+            throw WebServiceException::create($e);
+        }
+
+        return (string) $response;
     }
 
     /**
@@ -79,32 +128,6 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
         }
 
         return (boolean) $response;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function multiply($unit1, $unit2)
-    {
-        $query = http_build_query(['units' => func_get_args()]);
-
-        try {
-            $response = $this->get('multiply?' . $query, false);
-        } catch (BadResponseException $e) {
-            $response = $e->getResponse();
-            $matches = [];
-
-            // Unknown unit
-            if (($response->getStatusCode() === 404)
-                && preg_match('/^UnknownUnitException: Unknown unit (.+)$/', $response->getBody(), $matches)
-            ) {
-                throw UnknownUnitException::create($matches[1]);
-            }
-
-            throw WebServiceException::create($e);
-        }
-
-        return (string) $response;
     }
 
     /**

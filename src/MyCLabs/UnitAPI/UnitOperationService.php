@@ -59,22 +59,6 @@ interface UnitOperationService
     public function areCompatible($unit1, $unit2);
 
     /**
-     * Multiplies units and returns the resulting unit.
-     *
-     * For example:
-     *     km * h^-1 = km.h^-1
-     *     m^2 * m^-1 = m
-     *
-     * @param string $unit1 Expression of a unit.
-     * @param string $unit2 Expression of a unit.
-     * @param string ...    This method can take more than 2 parameters.
-     *
-     * @throws UnknownUnitException One of the unit is unknown.
-     * @return string Resulting unit.
-     */
-    public function multiply($unit1, $unit2);
-
-    /**
      * Inverses a unit.
      *
      * For example:

@@ -5,6 +5,7 @@ namespace UnitTest\MyCLabs\UnitAPI\WebService;
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
+use MyCLabs\UnitAPI\Operation\OperationBuilder;
 use MyCLabs\UnitAPI\WebService\UnitOperationWebService;
 
 /**
@@ -84,7 +85,12 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
     {
         $service = $this->createService('"m.g"');
 
-        $this->assertEquals('m.g', $service->multiply('m', 'g'));
+        $operation = OperationBuilder::multiplication()
+            ->with('m')
+            ->with('g')
+            ->getOperation();
+
+        $this->assertEquals('m.g', $service->execute($operation));
     }
 
     /**
@@ -94,7 +100,13 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
     public function testMultiplyUnitNotFound1()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
-        $service->multiply('m', 'g');
+
+        $operation = OperationBuilder::multiplication()
+            ->with('m')
+            ->with('g')
+            ->getOperation();
+
+        $service->execute($operation);
     }
 
     /**
@@ -104,7 +116,13 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
     public function testMultiplyUnitNotFound2()
     {
         $service = $this->createService('UnknownUnitException: Unknown unit g', 404);
-        $service->multiply('m', 'g');
+
+        $operation = OperationBuilder::multiplication()
+            ->with('m')
+            ->with('g')
+            ->getOperation();
+
+        $service->execute($operation);
     }
 
     public function testInverse()
