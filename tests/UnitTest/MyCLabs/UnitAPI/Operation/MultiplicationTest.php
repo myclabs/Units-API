@@ -13,10 +13,10 @@ class MultiplicationTest extends \PHPUnit_Framework_TestCase
     {
         $operation = OperationBuilder::multiplication()
             ->with('m', 1)
-            ->with('kg', 2)
+            ->with('kg^3', 2)
             ->with('s', -1)
             ->getOperation();
 
-        $this->assertEquals('m . kg^2 . s^-1', $operation->__toString());
+        $this->assertEquals('m * (kg^3)^2 * (s)^-1', $operation->__toString());
     }
 }

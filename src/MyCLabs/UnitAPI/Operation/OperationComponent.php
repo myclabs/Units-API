@@ -51,6 +51,6 @@ class OperationComponent
             return (string) $this->unitId;
         }
 
-        return $this->unitId . '^' . $this->exponent;
+        return '(' . $this->unitId . ')^' . $this->exponent;
     }
 }

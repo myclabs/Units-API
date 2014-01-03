@@ -14,6 +14,6 @@ class Multiplication extends Operation
      */
     public function __toString()
     {
-        return implode(' . ', $this->getComponents());
+        return implode(' * ', $this->getComponents());
     }
 }
