@@ -49,7 +49,7 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
         ]);
 
         try {
-            $response = $this->get('/api/en/execute?' . $query, false);
+            $response = $this->get('execute?' . $query, false);
         } catch (BadResponseException $e) {
             $response = $e->getResponse();
             $matches = [];
