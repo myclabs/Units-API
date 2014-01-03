@@ -48,7 +48,7 @@ class OperationComponent
     public function __toString()
     {
         if ($this->exponent === 1) {
-            return $this->unitId;
+            return (string) $this->unitId;
         }
 
         return $this->unitId . '^' . $this->exponent;
