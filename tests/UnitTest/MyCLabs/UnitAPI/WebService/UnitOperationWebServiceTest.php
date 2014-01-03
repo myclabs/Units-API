@@ -83,7 +83,7 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testAddition()
     {
-        $service = $this->createService('{"unit": "kg"}');
+        $service = $this->createService('{"unitId": "kg"}');
 
         $operation = OperationBuilder::addition()
             ->with('g')
@@ -98,7 +98,7 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testMultiplication()
     {
-        $service = $this->createService('{"unit": "m.kg", "conversionFactor": 1.}');
+        $service = $this->createService('{"unitId": "m.kg", "conversionFactor": 1.}');
 
         $operation = OperationBuilder::multiplication()
             ->with('m')

@@ -73,9 +73,9 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
 
         switch ($operation) {
             case $operation instanceof Addition:
-                return new AdditionResult($response->unit);
+                return new AdditionResult($response->unitId);
             case $operation instanceof Multiplication:
-                return new MultiplicationResult($response->unit, $response->conversionFactor);
+                return new MultiplicationResult($response->unitId, $response->conversionFactor);
             default:
                 throw new \Exception;
         }
