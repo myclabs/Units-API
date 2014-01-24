@@ -1,7 +1,7 @@
 machine:
   php:
-    version: 5.4
-    version: 5.5
+    version: 5.4.21
+    version: 5.5.3
 
 test:
   override:
