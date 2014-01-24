@@ -1,0 +1,8 @@
+machine:
+  php:
+    version: 5.4
+    version: 5.5
+
+test:
+  override:
+    - phpunit
