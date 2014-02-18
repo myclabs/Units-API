@@ -51,21 +51,16 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
         try {
             $response = $this->get('execute?' . $query, false);
         } catch (BadResponseException $e) {
-            $response = $e->getResponse();
-            $matches = [];
+            $exception = json_decode($e->getResponse()->getBody());
 
             // Unknown unit
-            if (($response->getStatusCode() === 404)
-                && preg_match('/^UnknownUnitException: Unknown unit (.+)$/', $response->getBody(), $matches)
-            ) {
-                throw UnknownUnitException::create($matches[1]);
+            if ($e->getResponse()->getStatusCode() === 404) {
+                throw new UnknownUnitException($exception->message, $exception->unitId);
             }
 
             // Incompatible units
-            if (($response->getStatusCode() === 400)
-                && preg_match('/^IncompatibleUnitsException: (.+)$/', $response->getBody(), $matches)
-            ) {
-                throw new IncompatibleUnitsException($matches[1]);
+            if ($e->getResponse()->getStatusCode() === 400) {
+                throw new IncompatibleUnitsException($exception->message);
             }
 
             throw WebServiceException::create($e);
