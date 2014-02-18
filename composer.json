@@ -2,9 +2,9 @@
     "name": "myclabs/units-api",
     "type": "library",
     "autoload": {
-        "psr-0": {
-            "MyCLabs\\UnitAPI": "src/",
-            "UnitAPITest": "tests/"
+        "psr-4": {
+            "MyCLabs\\UnitAPI\\": "src/MyCLabs/UnitAPI",
+            "UnitAPITest\\UnitTest\\MyCLabs\\UnitAPI\\": "tests/"
         }
     },
     "require": {
