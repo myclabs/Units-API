@@ -22,11 +22,18 @@ class OperationComponent
     /**
      * @param string $unitId
      * @param int    $exponent
+     * @throws \InvalidArgumentException Empty unitId given
      */
     public function __construct($unitId, $exponent)
     {
-        $this->unitId = $unitId;
-        $this->exponent = $exponent;
+        $this->unitId = (string) $unitId;
+        $this->exponent = (int) $exponent;
+
+        if ($this->unitId == '') {
+            throw new \InvalidArgumentException(sprintf(
+                'The unit ID given for the operation is empty'
+            ));
+        }
     }
 
     /**
