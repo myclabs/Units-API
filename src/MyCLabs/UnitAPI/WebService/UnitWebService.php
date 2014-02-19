@@ -2,11 +2,9 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
-use Guzzle\Http\Exception\BadResponseException;
 use MyCLabs\UnitAPI\DTO\PhysicalQuantityDTO;
 use MyCLabs\UnitAPI\DTO\UnitDTO;
 use MyCLabs\UnitAPI\DTO\UnitSystemDTO;
-use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 use MyCLabs\UnitAPI\UnitService;
 
 /**

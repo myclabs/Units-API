@@ -2,9 +2,6 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
-use Guzzle\Http\Exception\BadResponseException;
-use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
-use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 use MyCLabs\UnitAPI\Operation\Addition;
 use MyCLabs\UnitAPI\Operation\Multiplication;
 use MyCLabs\UnitAPI\Operation\Operation;
