@@ -5,6 +5,9 @@ namespace MyCLabs\UnitAPI\WebService;
 use Guzzle\Http\ClientInterface;
 use Guzzle\Http\Exception\BadResponseException;
 use Guzzle\Http\Exception\RequestException;
+use Guzzle\Http\Message\RequestInterface;
+use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
+use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 
 /**
  * Base class for webservice implementations.
@@ -30,26 +33,16 @@ class BaseWebService
      * Performs a HTTP GET request.
      *
      * @param string $url
-     * @param bool   $catchExceptions Should the method catch the exceptions?
      *
-     * @throws BadResponseException
+     * @throws UnknownUnitException
+     * @throws IncompatibleUnitsException
      * @throws WebServiceException
+     *
      * @return mixed Response of the webservice as a PHP array or object (stdClass)
      */
-    protected function get($url, $catchExceptions = true)
+    protected function get($url)
     {
-        $request = $this->httpClient->get($url);
-
-        try {
-            $response = $request->send();
-        } catch (BadResponseException $e) {
-            if (!$catchExceptions) {
-                throw $e;
-            }
-            throw WebServiceException::create($e);
-        } catch (RequestException $e) {
-            throw WebServiceException::create($e);
-        }
+        $response = $this->sendRequest($this->httpClient->get($url));
 
         return json_decode($response->getBody());
     }
@@ -60,19 +53,45 @@ class BaseWebService
      * @param string $url
      * @param array  $data POST data
      *
+     *
+     * @throws UnknownUnitException
+     * @throws IncompatibleUnitsException
      * @throws WebServiceException
+     *
      * @return mixed Response of the webservice as a PHP array or object (stdClass)
      */
     protected function post($url, $data)
     {
-        $request = $this->httpClient->post($url, null, $data);
-
-        try {
-            $response = $request->send();
-        } catch (RequestException $e) {
-            throw new WebServiceException('Error while calling the Units webservice: ' . $e->getMessage(), 0, $e);
-        }
+        $response = $this->sendRequest($this->httpClient->post($url, null, $data));
 
         return json_decode($response->getBody());
+    }
+
+    private function sendRequest(RequestInterface $request)
+    {
+        try {
+            return $request->send();
+        } catch (BadResponseException $e) {
+            $exception = json_decode($e->getResponse()->getBody());
+
+            // Error while decoding JSON response, or no exception type
+            if ($exception === null || ! isset($exception->exception)) {
+                throw WebServiceException::create($e);
+            }
+
+            // Unknown unit
+            if ($exception->exception === 'UnknownUnitException' && isset($exception->unitId)) {
+                throw new UnknownUnitException($exception->message, $exception->unitId);
+            }
+
+            // Incompatible units
+            if ($exception->exception === 'IncompatibleUnitsException') {
+                throw new IncompatibleUnitsException($exception->message);
+            }
+
+            throw WebServiceException::create($e);
+        } catch (RequestException $e) {
+            throw WebServiceException::create($e);
+        }
     }
 }

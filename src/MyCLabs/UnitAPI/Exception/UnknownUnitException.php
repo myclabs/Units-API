@@ -23,9 +23,13 @@ class UnknownUnitException extends Exception
         $this->unitId = $unitId;
     }
 
-    public static function create($id)
+    public static function create($id, $message = null)
     {
-        return new self("Unknown unit $id", $id);
+        if (! $message) {
+            $message = "Unknown unit $id";
+        }
+
+        return new self($message, $id);
     }
 
     /**

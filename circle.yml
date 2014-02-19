@@ -6,3 +6,7 @@ machine:
 test:
   override:
     - phpunit
+
+dependencies:
+  cache_directories:
+    - "vendor"

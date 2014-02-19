@@ -25,16 +25,20 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testGetUnit()
     {
-        $service = $this->createService(
-            '{"id":"m","label":"m\u00e8tre","symbol":"m","type":"standard",'
-            . '"unitSystem":"international","physicalQuantity":"l"}'
-        );
+        $service = $this->createService(json_encode([
+            'id'               => 'm',
+            'label'            => 'meter',
+            'symbol'           => 'm',
+            'type'             => 'standard',
+            'unitSystem'       => 'international',
+            'physicalQuantity' => 'l',
+        ]));
 
-        $unit = $service->getUnit('m', 'fr');
+        $unit = $service->getUnit('m', 'en');
 
         $this->assertTrue($unit instanceof UnitDTO);
         $this->assertEquals('m', $unit->id);
-        $this->assertEquals('mètre', $unit->label);
+        $this->assertEquals('meter', $unit->label);
     }
 
     /**
@@ -42,7 +46,11 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUnitNotFound()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm',
+        ]), 404);
         $service->getUnit('m', 'en');
     }
 
@@ -61,22 +69,30 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetCompatibleUnitsNotFound()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm',
+        ]), 404);
         $service->getCompatibleUnits('m', 'en');
     }
 
     public function testGetUnitOfReference()
     {
-        $service = $this->createService(
-            '{"id":"m","label":"m\u00e8tre","symbol":"m","type":"standard",'
-            . '"unitSystem":"international","physicalQuantity":"l"}'
-        );
+        $service = $this->createService(json_encode([
+            'id'               => 'm',
+            'label'            => 'meter',
+            'symbol'           => 'm',
+            'type'             => 'standard',
+            'unitSystem'       => 'international',
+            'physicalQuantity' => 'l',
+        ]));
 
-        $unit = $service->getUnitOfReference('km', 'fr');
+        $unit = $service->getUnitOfReference('km', 'en');
 
         $this->assertTrue($unit instanceof UnitDTO);
         $this->assertEquals('m', $unit->id);
-        $this->assertEquals('mètre', $unit->label);
+        $this->assertEquals('meter', $unit->label);
     }
 
     /**
@@ -84,7 +100,11 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetUnitOfReferenceNotFound()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm',
+        ]), 404);
         $service->getUnitOfReference('m', 'en');
     }
 

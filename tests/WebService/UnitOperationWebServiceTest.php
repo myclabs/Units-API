@@ -26,7 +26,11 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConversionFactorUnitNotFound1()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm'
+        ]), 404);
         $service->getConversionFactor('m', 'km');
     }
 
@@ -36,7 +40,11 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConversionFactorUnitNotFound2()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit km', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit km',
+            'unitId'    => 'km'
+        ]), 404);
         $service->getConversionFactor('m', 'km');
     }
 
@@ -46,11 +54,10 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetConversionFactorIncompatibleUnits()
     {
-        $service = $this->createService(
-            'IncompatibleUnitsException: Conversion factor impossible: '
-            . 'units "m" and "g" have different physical quantities: "l" and "m"',
-            400
-        );
+        $service = $this->createService(json_encode([
+            'exception' => 'IncompatibleUnitsException',
+            'message'   => 'Conversion factor impossible: units "m" and "g" have different physical quantities: "l" and "m"',
+        ]), 400);
         $service->getConversionFactor('m', 'g');
     }
 
@@ -67,7 +74,11 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testAreCompatibleUnitNotFound1()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm',
+        ]), 404);
         $service->areCompatible('m', 'km');
     }
 
@@ -77,13 +88,19 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testAreCompatibleUnitNotFound2()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit km', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit km',
+            'unitId'    => 'km',
+        ]), 404);
         $service->areCompatible('m', 'km');
     }
 
     public function testAddition()
     {
-        $service = $this->createService('{"unitId": "kg"}');
+        $service = $this->createService(json_encode([
+            'unitId' => 'kg',
+        ]));
 
         $operation = OperationBuilder::addition()
             ->with('g')
@@ -98,7 +115,10 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
 
     public function testMultiplication()
     {
-        $service = $this->createService('{"unitId": "m.kg", "conversionFactor": 1.}');
+        $service = $this->createService(json_encode([
+            'unitId' => 'm.kg',
+            'conversionFactor' => 1.,
+        ]));
 
         $operation = OperationBuilder::multiplication()
             ->with('m')
@@ -118,7 +138,11 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testMultiplicationUnitNotFound1()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm',
+        ]), 404);
 
         $operation = OperationBuilder::multiplication()
             ->with('m')
@@ -130,11 +154,15 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @expectedException \MyCLabs\UnitAPI\Exception\UnknownUnitException
-     * @expectedExceptionMessage Unknown unit g
+     * @expectedExceptionMessage Invalid unit expression '': Expected UNIT_ID, but got end of input.
      */
     public function testMultiplicationUnitNotFound2()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit g', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Invalid unit expression \'\': Expected UNIT_ID, but got end of input.',
+            'unitId'    => '',
+        ]), 404);
 
         $operation = OperationBuilder::multiplication()
             ->with('m')
@@ -157,7 +185,11 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
      */
     public function testInverseUnitNotFound()
     {
-        $service = $this->createService('UnknownUnitException: Unknown unit m', 404);
+        $service = $this->createService(json_encode([
+            'exception' => 'UnknownUnitException',
+            'message'   => 'Unknown unit m',
+            'unitId'    => 'm',
+        ]), 404);
         $service->inverse('m');
     }
 
