@@ -49,16 +49,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnit($id, $locale)
     {
-        try {
-            $response = $this->get($locale . '/unit/' . urlencode($id), false);
-        } catch (BadResponseException $e) {
-            if (($e->getResponse()->getStatusCode() === 404)
-                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
-            ) {
-                throw UnknownUnitException::create($id);
-            }
-            throw WebServiceException::create($e);
-        }
+        $response = $this->get($locale . '/unit/' . urlencode($id));
 
         $unit = new UnitDTO();
         $unit->id = $response->id;
@@ -80,16 +71,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getCompatibleUnits($id, $locale)
     {
-        try {
-            $response = $this->get($locale . '/compatible-units/' . urlencode($id), false);
-        } catch (BadResponseException $e) {
-            if (($e->getResponse()->getStatusCode() === 404)
-                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
-            ) {
-                throw UnknownUnitException::create($id);
-            }
-            throw WebServiceException::create($e);
-        }
+        $response = $this->get($locale . '/compatible-units/' . urlencode($id));
 
         $units = [];
 
@@ -117,16 +99,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnitOfReference($id, $locale)
     {
-        try {
-            $response = $this->get($locale . '/unit-of-reference/' . urlencode($id), false);
-        } catch (BadResponseException $e) {
-            if (($e->getResponse()->getStatusCode() === 404)
-                && (strpos($e->getResponse()->getBody(), 'UnknownUnitException') === 0)
-            ) {
-                throw UnknownUnitException::create($id);
-            }
-            throw WebServiceException::create($e);
-        }
+        $response = $this->get($locale . '/unit-of-reference/' . urlencode($id));
 
         $unit = new UnitDTO();
         $unit->id = $response->id;
