@@ -75,7 +75,16 @@ class BaseWebService
             $exception = json_decode($e->getResponse()->getBody());
 
             // Error while decoding JSON response, or no exception type
-            if ($exception === null || ! isset($exception->exception)) {
+            if ($exception === null) {
+                throw WebServiceException::create($e);
+            }
+
+            // No exception type
+            if (! isset($exception->exception)) {
+                if (isset($exception->message)) {
+                    throw WebServiceException::create($e, $exception->message);
+                }
+
                 throw WebServiceException::create($e);
             }
 

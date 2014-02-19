@@ -41,6 +41,30 @@ class BaseWebServiceTest extends \PHPUnit_Framework_TestCase
         $service->doGet();
     }
 
+    /**
+     * @expectedException \MyCLabs\UnitAPI\WebService\WebServiceException
+     * @expectedExceptionMessage Error while calling the Units webservice: 400 Foo bar
+     */
+    public function testAnyExceptionWithMessage()
+    {
+        $service = $this->createService(json_encode([
+            'message' => 'Foo bar',
+        ]), 400);
+
+        $service->doGet();
+    }
+
+    /**
+     * @expectedException \MyCLabs\UnitAPI\WebService\WebServiceException
+     * @expectedExceptionMessage Error while calling the Units webservice: 400
+     */
+    public function testAnyExceptionWithoutMessage()
+    {
+        $service = $this->createService('', 400);
+
+        $service->doGet();
+    }
+
     private function createService($responseBody, $responseCode = 200)
     {
         $plugin = new MockPlugin();

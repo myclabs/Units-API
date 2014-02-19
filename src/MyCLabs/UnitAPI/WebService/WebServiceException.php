@@ -10,16 +10,16 @@ use Guzzle\Http\Exception\RequestException;
  */
 class WebServiceException extends \RuntimeException
 {
-    public static function create(RequestException $e)
+    public static function create(RequestException $e, $message = null)
     {
         if ($e instanceof BadResponseException) {
             return new self(sprintf(
                 'Error while calling the Units webservice: %s %s',
                 $e->getResponse()->getStatusCode(),
-                $e->getResponse()->getBody()
+                $message ?: $e->getResponse()->getBody()
             ), 0, $e);
         }
 
-        return new WebServiceException('Error while calling the Units webservice: ' . $e->getMessage(), 0, $e);
+        return new WebServiceException('Error while calling the Units webservice: ' . $message ?: $e->getMessage(), 0, $e);
     }
 }
