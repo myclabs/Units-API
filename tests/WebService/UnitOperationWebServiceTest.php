@@ -172,6 +172,24 @@ class UnitOperationWebServiceTest extends \PHPUnit_Framework_TestCase
         $service->execute($operation);
     }
 
+    /**
+     * @expectedException \MyCLabs\UnitAPI\WebService\WebServiceException
+     * @expectedExceptionMessage Error while executing the operation "m * g"
+     */
+    public function testMultiplicationWebServiceException()
+    {
+        $service = $this->createService(json_encode([
+            'message'   => 'Each component of the operation must have a unit defined',
+        ]), 400);
+
+        $operation = OperationBuilder::multiplication()
+            ->with('m')
+            ->with('g')
+            ->getOperation();
+
+        $service->execute($operation);
+    }
+
     public function testInverse()
     {
         $service = $this->createService('"m^-1"');

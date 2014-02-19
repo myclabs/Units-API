@@ -45,7 +45,16 @@ class UnitOperationWebService extends BaseWebService implements UnitOperationSer
             'components' => $components,
         ]);
 
-        $response = $this->get('execute?' . $query);
+        try {
+            $response = $this->get('execute?' . $query);
+        } catch (WebServiceException $e) {
+            throw new WebServiceException(sprintf(
+                'Error while executing the operation "%s"%s%s',
+                (string) $operation,
+                PHP_EOL,
+                $e->getMessage()
+            ), 0, $e);
+        }
 
         switch ($operation) {
             case $operation instanceof Addition:
