@@ -5,6 +5,7 @@ namespace UnitTest\MyCLabs\UnitAPI\WebService;
 use Guzzle\Http\Client;
 use Guzzle\Http\Message\Response;
 use Guzzle\Plugin\Mock\MockPlugin;
+use MyCLabs\UnitAPI\DTO\TranslatedString;
 use MyCLabs\UnitAPI\DTO\UnitDTO;
 use MyCLabs\UnitAPI\WebService\UnitWebService;
 
@@ -17,7 +18,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
     {
         $service = $this->createService('[]');
 
-        $units = $service->getUnits('en');
+        $units = $service->getUnits();
 
         $this->assertInternalType('array', $units);
         $this->assertEmpty($units);
@@ -27,18 +28,25 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
     {
         $service = $this->createService(json_encode([
             'id'               => 'm',
-            'label'            => 'meter',
-            'symbol'           => 'm',
+            'label'            => ['en' => 'meter', 'fr' => 'mètre'],
+            'symbol'           => ['en' => 'm', 'fr' => 'm'],
             'type'             => 'standard',
             'unitSystem'       => 'international',
             'physicalQuantity' => 'l',
         ]));
 
-        $unit = $service->getUnit('m', 'en');
+        $unit = $service->getUnit('m');
 
         $this->assertTrue($unit instanceof UnitDTO);
         $this->assertEquals('m', $unit->id);
-        $this->assertEquals('meter', $unit->label);
+
+        $this->assertTrue($unit->label instanceof TranslatedString);
+        $this->assertEquals('meter', $unit->label->en);
+        $this->assertEquals('mètre', $unit->label->fr);
+
+        $this->assertTrue($unit->symbol instanceof TranslatedString);
+        $this->assertEquals('m', $unit->symbol->en);
+        $this->assertEquals('m', $unit->symbol->fr);
     }
 
     /**
@@ -51,14 +59,14 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
             'message'   => 'Unknown unit m',
             'unitId'    => 'm',
         ]), 404);
-        $service->getUnit('m', 'en');
+        $service->getUnit('m');
     }
 
     public function testGetCompatibleUnitsEmpty()
     {
         $service = $this->createService('[]');
 
-        $units = $service->getCompatibleUnits('m', 'en');
+        $units = $service->getCompatibleUnits('m');
 
         $this->assertInternalType('array', $units);
         $this->assertEmpty($units);
@@ -74,25 +82,28 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
             'message'   => 'Unknown unit m',
             'unitId'    => 'm',
         ]), 404);
-        $service->getCompatibleUnits('m', 'en');
+        $service->getCompatibleUnits('m');
     }
 
     public function testGetUnitOfReference()
     {
         $service = $this->createService(json_encode([
             'id'               => 'm',
-            'label'            => 'meter',
-            'symbol'           => 'm',
+            'label'            => ['en' => 'meter', 'fr' => 'mètre'],
+            'symbol'           => ['en' => 'm', 'fr' => 'm'],
             'type'             => 'standard',
             'unitSystem'       => 'international',
             'physicalQuantity' => 'l',
         ]));
 
-        $unit = $service->getUnitOfReference('km', 'en');
+        $unit = $service->getUnitOfReference('km');
 
         $this->assertTrue($unit instanceof UnitDTO);
         $this->assertEquals('m', $unit->id);
-        $this->assertEquals('meter', $unit->label);
+
+        $this->assertTrue($unit->label instanceof TranslatedString);
+        $this->assertEquals('meter', $unit->label->en);
+        $this->assertEquals('mètre', $unit->label->fr);
     }
 
     /**
@@ -105,7 +116,7 @@ class UnitWebServiceTest extends \PHPUnit_Framework_TestCase
             'message'   => 'Unknown unit m',
             'unitId'    => 'm',
         ]), 404);
-        $service->getUnitOfReference('m', 'en');
+        $service->getUnitOfReference('m');
     }
 
     private function createService($responseBody, $responseCode = 200)

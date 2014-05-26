@@ -21,13 +21,13 @@ class UnitDTO
 
     /**
      * Label.
-     * @var string
+     * @var TranslatedString
      */
     public $label;
 
     /**
      * Symbol.
-     * @var string
+     * @var TranslatedString
      */
     public $symbol;
 

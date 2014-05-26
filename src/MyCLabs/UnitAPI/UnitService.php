@@ -15,33 +15,29 @@ interface UnitService
     /**
      * Returns all known units.
      *
-     * @param string $locale
-     *
      * @return UnitDTO[]
      */
-    public function getUnits($locale);
+    public function getUnits();
 
     /**
      * Returns a unit.
      *
-     * @param string $id     Expression identifying the unit.
-     * @param string $locale
+     * @param string $id Expression identifying the unit.
      *
      * @throws UnknownUnitException
      * @return UnitDTO
      */
-    public function getUnit($id, $locale);
+    public function getUnit($id);
 
     /**
      * Returns all units compatible with the given unit.
      *
-     * @param string $id     Expression identifying a unit.
-     * @param string $locale
+     * @param string $id Expression identifying a unit.
      *
      * @throws UnknownUnitException
      * @return UnitDTO[] Compatible units.
      */
-    public function getCompatibleUnits($id, $locale);
+    public function getCompatibleUnits($id);
 
     /**
      * Returns the unit of reference of the given unit.
@@ -49,29 +45,24 @@ interface UnitService
      * The unit of reference would be the unit of reference of the same physical quantity.
      * For example, m is the unit of reference for km, and m^2 for km^2.
      *
-     * @param string $id     Expression identifying a unit.
-     * @param string $locale
+     * @param string $id Expression identifying a unit.
      *
      * @throws UnknownUnitException
      * @return UnitDTO
      */
-    public function getUnitOfReference($id, $locale);
+    public function getUnitOfReference($id);
 
     /**
      * Returns all systems of units.
      *
-     * @param string $locale
-     *
      * @return UnitSystemDTO[]
      */
-    public function getUnitSystems($locale);
+    public function getUnitSystems();
 
     /**
      * Returns all physical quantities.
      *
-     * @param string $locale
-     *
      * @return PhysicalQuantityDTO[]
      */
-    public function getPhysicalQuantities($locale);
+    public function getPhysicalQuantities();
 }

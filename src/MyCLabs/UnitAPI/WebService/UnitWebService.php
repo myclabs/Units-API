@@ -3,6 +3,7 @@
 namespace MyCLabs\UnitAPI\WebService;
 
 use MyCLabs\UnitAPI\DTO\PhysicalQuantityDTO;
+use MyCLabs\UnitAPI\DTO\TranslatedString;
 use MyCLabs\UnitAPI\DTO\UnitDTO;
 use MyCLabs\UnitAPI\DTO\UnitSystemDTO;
 use MyCLabs\UnitAPI\UnitService;
@@ -17,26 +18,14 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnits($locale)
+    public function getUnits()
     {
-        $response = $this->get($locale . '/unit/');
+        $response = $this->get('/unit/');
 
         $units = [];
 
         foreach ($response as $item) {
-            $unit = new UnitDTO();
-            $unit->id = $item->id;
-            $unit->label = $item->label;
-            $unit->symbol = $item->symbol;
-            $unit->type = $item->type;
-            if (isset($item->unitSystem)) {
-                $unit->unitSystem = $item->unitSystem;
-            }
-            if (isset($item->physicalQuantity)) {
-                $unit->physicalQuantity = $item->physicalQuantity;
-            }
-
-            $units[] = $unit;
+            $units[] = $this->getUnitDTO($item);
         }
 
         return $units;
@@ -45,48 +34,24 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnit($id, $locale)
+    public function getUnit($id)
     {
-        $response = $this->get($locale . '/unit/' . urlencode($id));
+        $response = $this->get('/unit/' . urlencode($id));
 
-        $unit = new UnitDTO();
-        $unit->id = $response->id;
-        $unit->label = $response->label;
-        $unit->symbol = $response->symbol;
-        $unit->type = $response->type;
-        if (isset($response->unitSystem)) {
-            $unit->unitSystem = $response->unitSystem;
-        }
-        if (isset($response->physicalQuantity)) {
-            $unit->physicalQuantity = $response->physicalQuantity;
-        }
-
-        return $unit;
+        return $this->getUnitDTO($response);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getCompatibleUnits($id, $locale)
+    public function getCompatibleUnits($id)
     {
-        $response = $this->get($locale . '/compatible-units/' . urlencode($id));
+        $response = $this->get('/compatible-units/' . urlencode($id));
 
         $units = [];
 
         foreach ($response as $item) {
-            $unit = new UnitDTO();
-            $unit->id = $item->id;
-            $unit->label = $item->label;
-            $unit->symbol = $item->symbol;
-            $unit->type = $item->type;
-            if (isset($item->unitSystem)) {
-                $unit->unitSystem = $item->unitSystem;
-            }
-            if (isset($item->physicalQuantity)) {
-                $unit->physicalQuantity = $item->physicalQuantity;
-            }
-
-            $units[] = $unit;
+            $units[] = $this->getUnitDTO($item);
         }
 
         return $units;
@@ -95,38 +60,26 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getUnitOfReference($id, $locale)
+    public function getUnitOfReference($id)
     {
-        $response = $this->get($locale . '/unit-of-reference/' . urlencode($id));
+        $response = $this->get('/unit-of-reference/' . urlencode($id));
 
-        $unit = new UnitDTO();
-        $unit->id = $response->id;
-        $unit->label = $response->label;
-        $unit->symbol = $response->symbol;
-        $unit->type = $response->type;
-        if (isset($response->unitSystem)) {
-            $unit->unitSystem = $response->unitSystem;
-        }
-        if (isset($response->physicalQuantity)) {
-            $unit->physicalQuantity = $response->physicalQuantity;
-        }
-
-        return $unit;
+        return $this->getUnitDTO($response);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function getUnitSystems($locale)
+    public function getUnitSystems()
     {
-        $response = $this->get($locale . '/unit-system/');
+        $response = $this->get('/unit-system/');
 
         $unitSystems = [];
 
         foreach ($response as $item) {
             $unitSystem = new UnitSystemDTO();
             $unitSystem->id = $item->id;
-            $unitSystem->label = $item->label;
+            $unitSystem->label = TranslatedString::fromArray((array) $item->label);
 
             $unitSystems[] = $unitSystem;
         }
@@ -137,16 +90,16 @@ class UnitWebService extends BaseWebService implements UnitService
     /**
      * {@inheritdoc}
      */
-    public function getPhysicalQuantities($locale)
+    public function getPhysicalQuantities()
     {
-        $response = $this->get($locale . '/physical-quantity/');
+        $response = $this->get('/physical-quantity/');
 
         $quantities = [];
 
         foreach ($response as $item) {
             $quantity = new PhysicalQuantityDTO();
             $quantity->id = $item->id;
-            $quantity->label = $item->label;
+            $quantity->label = TranslatedString::fromArray((array) $item->label);
             $quantity->symbol = $item->symbol;
             $quantity->unitOfReference = $item->unitOfReference;
 
@@ -154,5 +107,22 @@ class UnitWebService extends BaseWebService implements UnitService
         }
 
         return $quantities;
+    }
+
+    private function getUnitDTO($item)
+    {
+        $unit = new UnitDTO();
+        $unit->id = $item->id;
+        $unit->label = TranslatedString::fromArray((array) $item->label);
+        $unit->symbol = TranslatedString::fromArray((array) $item->symbol);
+        $unit->type = $item->type;
+        if (isset($item->unitSystem)) {
+            $unit->unitSystem = $item->unitSystem;
+        }
+        if (isset($item->physicalQuantity)) {
+            $unit->physicalQuantity = $item->physicalQuantity;
+        }
+
+        return $unit;
     }
 }

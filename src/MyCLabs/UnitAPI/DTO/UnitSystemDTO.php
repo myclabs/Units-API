@@ -17,7 +17,7 @@ class UnitSystemDTO
 
     /**
      * Label.
-     * @var string
+     * @var TranslatedString
      */
     public $label;
 }
