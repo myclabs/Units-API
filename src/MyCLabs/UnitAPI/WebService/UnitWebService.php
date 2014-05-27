@@ -20,7 +20,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnits()
     {
-        $response = $this->get('/unit/');
+        $response = $this->get('unit/');
 
         $units = [];
 
@@ -36,7 +36,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnit($id)
     {
-        $response = $this->get('/unit/' . urlencode($id));
+        $response = $this->get('unit/' . urlencode($id));
 
         return $this->getUnitDTO($response);
     }
@@ -46,7 +46,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getCompatibleUnits($id)
     {
-        $response = $this->get('/compatible-units/' . urlencode($id));
+        $response = $this->get('compatible-units/' . urlencode($id));
 
         $units = [];
 
@@ -62,7 +62,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnitOfReference($id)
     {
-        $response = $this->get('/unit-of-reference/' . urlencode($id));
+        $response = $this->get('unit-of-reference/' . urlencode($id));
 
         return $this->getUnitDTO($response);
     }
@@ -72,7 +72,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getUnitSystems()
     {
-        $response = $this->get('/unit-system/');
+        $response = $this->get('unit-system/');
 
         $unitSystems = [];
 
@@ -92,7 +92,7 @@ class UnitWebService extends BaseWebService implements UnitService
      */
     public function getPhysicalQuantities()
     {
-        $response = $this->get('/physical-quantity/');
+        $response = $this->get('physical-quantity/');
 
         $quantities = [];
 
