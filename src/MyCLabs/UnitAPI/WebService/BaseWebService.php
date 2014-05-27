@@ -2,10 +2,10 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
-use Guzzle\Http\ClientInterface;
-use Guzzle\Http\Exception\BadResponseException;
-use Guzzle\Http\Exception\RequestException;
-use Guzzle\Http\Message\RequestInterface;
+use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Message\RequestInterface;
 use MyCLabs\UnitAPI\Exception\IncompatibleUnitsException;
 use MyCLabs\UnitAPI\Exception\UnknownUnitException;
 
@@ -42,7 +42,7 @@ class BaseWebService
      */
     protected function get($url)
     {
-        $response = $this->sendRequest($this->httpClient->get($url));
+        $response = $this->sendRequest($this->httpClient->createRequest('GET', $url));
 
         return json_decode($response->getBody());
     }
@@ -62,7 +62,10 @@ class BaseWebService
      */
     protected function post($url, $data)
     {
-        $response = $this->sendRequest($this->httpClient->post($url, null, $data));
+        $request = $this->httpClient->createRequest('POST', $url, [
+            'body' => $data,
+        ]);
+        $response = $this->sendRequest($request);
 
         return json_decode($response->getBody());
     }
@@ -70,7 +73,7 @@ class BaseWebService
     private function sendRequest(RequestInterface $request)
     {
         try {
-            return $request->send();
+            return $this->httpClient->send($request);
         } catch (BadResponseException $e) {
             $exception = json_decode($e->getResponse()->getBody());
 

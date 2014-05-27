@@ -2,8 +2,8 @@
 
 namespace MyCLabs\UnitAPI\WebService;
 
-use Guzzle\Http\Exception\BadResponseException;
-use Guzzle\Http\Exception\RequestException;
+use GuzzleHttp\Exception\BadResponseException;
+use GuzzleHttp\Exception\RequestException;
 
 /**
  * Error while trying to reach the webservice.

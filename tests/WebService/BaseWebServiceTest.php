@@ -2,9 +2,10 @@
 
 namespace UnitTest\MyCLabs\UnitAPI\WebService;
 
-use Guzzle\Http\Client;
-use Guzzle\Http\Message\Response;
-use Guzzle\Plugin\Mock\MockPlugin;
+use GuzzleHttp\Client;
+use GuzzleHttp\Message\Response;
+use GuzzleHttp\Stream\Stream;
+use GuzzleHttp\Subscriber\Mock;
 use MyCLabs\UnitAPI\WebService\BaseWebService;
 
 /**
@@ -67,10 +68,11 @@ class BaseWebServiceTest extends \PHPUnit_Framework_TestCase
 
     private function createService($responseBody, $responseCode = 200)
     {
-        $plugin = new MockPlugin();
-        $plugin->addResponse(new Response($responseCode, null, $responseBody));
+        $mock = new Mock([
+            new Response($responseCode, [], Stream::factory($responseBody)),
+        ]);
         $httpClient = new Client();
-        $httpClient->addSubscriber($plugin);
+        $httpClient->getEmitter()->attach($mock);
 
         return new MockImplementation($httpClient);
     }
