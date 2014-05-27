@@ -31,8 +31,15 @@ interface UnitOperationService
     /**
      * Returns the conversion factor between two compatible units.
      *
-     * This conversion factor allows to convert a value from unit 1 to unit 2:
-     *     Value in unit 1 * conversion factor = value in unit 2
+     * WARNING: note that this is the conversion factor between the two units.
+     * This is the *inverse* of the conversion factor you can use to convert values.
+     *
+     * To convert a value from unit 1 to unit 2:
+     *     Value in unit 1 / conversion factor = value in unit 2
+     *
+     * e.g. 1 km = 1000 m (the conversion factor here is 1000)
+     *      To convert a value in km to m, you need to divide by the conversion factor:
+     *      ? km / 1000 => ? m
      *
      * @param string $unit1 Expression of the source unit.
      * @param string $unit2 Expression of the target unit.
